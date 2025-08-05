@@ -1,36 +1,6 @@
-// const products = [{
-//     image: 'images/products/athletic-cotton-socks-6-pairs.jpg',
-//     name: 'Black and Gray Athletic Cotton Socks - 6 Pairs',
-//     rating: {
-//         stars: '4.5',
-//         count: '87'
-//     },
-//     priceC: 1090
-// }, {
-//     image: 'images/products/intermediate-composite-basketball.jpg',
-//     name: 'Intermediate Size Basketball',
-//     rating: {
-//         stars: '4',
-//         count: '127'
-//     },
-//     priceC: 2095
-// }, {
-//     image: 'images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg',
-//     name: 'Adults Plain Cotton T-Shirt - 2 Pack',
-//     rating: {
-//         stars: '4.5',
-//         count: '56'
-//     },
-//     priceC: 799
-// }, {
-//     image: 'images/products/black-2-slot-toaster.jpg',
-//     name: '2 Slot Toaster - Black',
-//     rating: {
-//         stars: '5',
-//         count: '2197'
-//     },
-//     priceC: 1899
-// }];
+import {cart, addToCart} from '../data/cart.js';
+//got the cart variable out of the module. All import must be made on the top
+import { products } from '../data/products.js'; 
 
 let productsHTML = ''; 
 products.forEach((product) => {
@@ -54,7 +24,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-price">
-            $${(product.priceC/100).toFixed(2)}
+            $${(product.priceCents/100).toFixed(2)}
           </div>
 
           <div class="product-quantity-container">
@@ -90,21 +60,15 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 // If you had used a simple queryselector then it would have worked for only one button. Right now this is like an array of buttons, it's called a NodeList.
 //The data attirbute data-product-name will be extrated through the dataset function (it gives us all the available attributed of an HTML element.
 //The data-product-name == productName
+
 let cart_quantity = 0;
 document.querySelectorAll('.add-to-cart-button').forEach(button => {
   button.addEventListener('click', () => {
     const productElement = button.closest('.product-container');
     const qty = parseInt(productElement.querySelector('.js-quantity-select').value);
     const productId = button.dataset.productId;
-    if(cart.some(item => item.productId === productId)){
-      item.quantity += qty; 
-    }
-    else{
-      cart.push({
-        productId: productId,
-        quantity: qty
-      })
-    }
+    addToCart(productId, qty)
+
     cart_quantity += qty
     document.querySelector('.cart-quantity').innerHTML = cart_quantity;
   });

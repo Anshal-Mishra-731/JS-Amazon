@@ -58,8 +58,9 @@
       </div>
 
     </div>
-    <script src="data/cart.js"></script>
-    <script src="data/products.js"></script>
-    <script src="scripts/amazon.js"></script>
+    <!-- <script src="data/cart.js"></script>
+    <script src="data/products.js"></script> -->
+    <script type = "module" src="scripts/amazon.js"></script>
+<!-- The type module thing lets a JS file acess variables from other files. What's the problem with the normal system though? where firstly cart.js runs and then etc etc. the problem is that once the cart variable is declared in cart.js we can't use it in any other file. This will cause naming conflicts for bigger projects -->
   </body>
 </html>
