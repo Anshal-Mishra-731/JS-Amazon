@@ -1,4 +1,4 @@
-import {cart, addToCart} from '../data/cart.js';
+import {cart, addToCart, UpdateCart, cart_quantity} from '../data/cart.js';
 //got the cart variable out of the module. All import must be made on the top
 import { products } from '../data/products.js'; 
 
@@ -61,15 +61,14 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 //The data attirbute data-product-name will be extrated through the dataset function (it gives us all the available attributed of an HTML element.
 //The data-product-name == productName
 
-let cart_quantity = 0;
+document.querySelector('.cart-quantity').innerHTML = cart_quantity;
 document.querySelectorAll('.add-to-cart-button').forEach(button => {
   button.addEventListener('click', () => {
     const productElement = button.closest('.product-container');
     const qty = parseInt(productElement.querySelector('.js-quantity-select').value);
     const productId = button.dataset.productId;
     addToCart(productId, qty)
-
-    cart_quantity += qty
+    UpdateCart(qty);
     document.querySelector('.cart-quantity').innerHTML = cart_quantity;
   });
 });

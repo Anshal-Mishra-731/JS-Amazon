@@ -5,6 +5,16 @@ export let cart = JSON.parse(localStorage.getItem('cart')) || [];
 export function saveCart (){
   localStorage.setItem('cart', JSON.stringify(cart));
 }
+export let cart_quantity = JSON.parse(localStorage.getItem('cartQ')) || 0;
+export function UpdateCart(qty){
+  cart_quantity += qty; 
+  localStorage.setItem('cartQ', JSON.stringify(cart_quantity));
+}
+export function DecreCart(qty){
+  cart_quantity -= qty;
+  localStorage.setItem('cartQ', JSON.stringify(cart_quantity));
+}
+
 
 export function addToCart (productId, qty){
     const existingItem = cart.find(item => item.productId === productId);
@@ -17,6 +27,15 @@ export function addToCart (productId, qty){
         quantity: qty
       })
     }
-
     saveCart(); 
+
+}
+
+export function DelFromCart(productId){
+  const index = cart.findIndex(item => item.productId === productId);
+  if(index != -1){
+    cart.splice(index, 1); 
+    saveCart();
+  }
+  // location.reload(); ये भी काम कर रहा था। 
 }
