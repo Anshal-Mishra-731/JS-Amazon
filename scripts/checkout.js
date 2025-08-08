@@ -2,20 +2,10 @@ import { cart, DecreCart, cart_quantity, DelFromCart, UpdateCart, UpdateDelID } 
 import { products } from "../data/products.js";
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import { deliveryOptions } from "../data/deliveryoptions.js";
+// External library dayjs
 
-window.cart = cart; 
-
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('delivery-option-input')) {
-        const container = e.target.closest('.item-container');
-        const checked = container.querySelector('.delivery-option-input:checked');
-        const selectedDate = checked.dataset.deliveryDate;
-        container.querySelector('.delivery-date').textContent = `Delivery date: ${selectedDate}`;; 
-    }
-    
-})
-
-let cartSumHTML = "";
+function renderOrderSummary(){
+let cartSumHTML = ``;
 cart.forEach((item) => {
     const productId = item.productId;
     let matchingProduct = products.find(p => p.id === productId);
@@ -144,6 +134,64 @@ document.querySelectorAll('.delivery-option-input').forEach((elam) => {
         const prod = elam.dataset.productId;
         const id = elam.dataset.deliveryId;
         UpdateDelID(prod ,id); 
+        renderOrderSummary(); 
     })
 })
+}
+renderOrderSummary(); 
+// The rendering thing has a benifit. in the MVC model, you First geenrate HTML code, interact with the genrated page, make changes and then re-render the page in order to enforce that change.
+
+function renderPayment(){
+    let ppriceCents = 0; 
+    let spriceCents = 0; 
+    cart.forEach((item) => {
+        const productId = item.productId;
+        let matchingProduct = products.find(p => p.id === productId);
+        ppriceCents += matchingProduct.priceCents * item.quantity; 
+        let productOption = item.deliveryOptionsId;
+        let matchingOption = cart.find(p => p.id === productOption);
+        spriceCentspriceCents += matchingOption.priceCents; 
+    })
+    const TotalBeforeTax = ppriceCents + spriceCents; 
+    const TaxCents = TotalBeforeTax * 0.1; 
+    const Total = TotalBeforeTax + TaxCents; 
+
+    const PaymentHtml = ``; 
+    PaymentHtml += 
+    `
+        <div class="payment-summary-title">
+        Order Summary
+        </div>
+
+        <div class="payment-summary-row">
+        <div>Items (${cart_quantity}):</div>
+        <div class="payment-summary-money">${(ppriceCents/100).toFixed(2)}</div>
+        </div>
+
+        <div class="payment-summary-row">
+        <div>Shipping &amp; handling:</div>
+        <div class="payment-summary-money">${(spriceCents/100).toFixed(2)}</div>
+        </div>
+
+        <div class="payment-summary-row subtotal-row">
+        <div>Total before tax:</div>
+        <div class="payment-summary-money">${(TotalBeforeTax/100).toFixed(2)}}</div>
+        </div>
+
+        <div class="payment-summary-row">
+        <div>Estimated tax (10%):</div>
+        <div class="payment-summary-money">${(TaxCents/100).toFixed(2)}}</div>
+        </div>
+
+        <div class="payment-summary-row total-row">
+        <div>Order total:</div>
+        <div class="payment-summary-money">${(Total/100).toFixed(2)}</div>
+        </div>
+
+        <button class="place-order-button button-primary">
+        Place your order
+        </button>
+    `
+}
+
 
