@@ -64,6 +64,8 @@ document.querySelectorAll('.delete-quantity-link').forEach((link) => {
         DelFromCart(productId);
         document.querySelector(`.cart-item-container-${productId}`).remove();
         document.querySelector('.return-to-home-link').innerHTML = cart_quantity;
+        renderOrderSummary();
+        renderPayment();
     }) 
 })
 
@@ -74,7 +76,8 @@ document.querySelectorAll('.update-quantity-link').forEach((link) => {
         if (link.innerText.trim() === 'Update'){  
         container.querySelector('.update-quantity-link').innerHTML = `Save`; 
         container.querySelector('.quantity-label').style.display = 'none';
-        container.querySelector('.js-new-quantity-input').style.display = 'inline-block';}
+        container.querySelector('.js-new-quantity-input').style.display = 'inline-block';
+        renderPayment();}
 
         else{
         let neu_qty = parseInt(container.querySelector('.js-new-quantity-input').value);
@@ -93,7 +96,8 @@ document.querySelectorAll('.update-quantity-link').forEach((link) => {
         document.querySelector('.return-to-home-link').innerHTML = cart_quantity;
         container.querySelector('.quantity-label').style.display = 'inline-block';
         container.querySelector('.js-new-quantity-input').style.display = 'none';
-        container.querySelector('.update-quantity-link').innerHTML = `Update`;}
+        container.querySelector('.update-quantity-link').innerHTML = `Update`;
+        renderPayment();}
     });
 })
 
@@ -135,6 +139,7 @@ document.querySelectorAll('.delivery-option-input').forEach((elam) => {
         const id = elam.dataset.deliveryId;
         UpdateDelID(prod ,id); 
         renderOrderSummary(); 
+        renderPayment();
     })
 })
 }
@@ -149,14 +154,14 @@ function renderPayment(){
         let matchingProduct = products.find(p => p.id === productId);
         ppriceCents += matchingProduct.priceCents * item.quantity; 
         let productOption = item.deliveryOptionsId;
-        let matchingOption = cart.find(p => p.id === productOption);
-        spriceCentspriceCents += matchingOption.priceCents; 
+        let matchingOption = deliveryOptions.find(p => p.id === productOption);
+        spriceCents += matchingOption.priceCents; 
     })
     const TotalBeforeTax = ppriceCents + spriceCents; 
     const TaxCents = TotalBeforeTax * 0.1; 
     const Total = TotalBeforeTax + TaxCents; 
 
-    const PaymentHtml = ``; 
+    let PaymentHtml = ``; 
     PaymentHtml += 
     `
         <div class="payment-summary-title">
@@ -165,33 +170,35 @@ function renderPayment(){
 
         <div class="payment-summary-row">
         <div>Items (${cart_quantity}):</div>
-        <div class="payment-summary-money">${(ppriceCents/100).toFixed(2)}</div>
+        <div class="payment-summary-money">$${(ppriceCents/100).toFixed(2)}</div>
         </div>
 
         <div class="payment-summary-row">
         <div>Shipping &amp; handling:</div>
-        <div class="payment-summary-money">${(spriceCents/100).toFixed(2)}</div>
+        <div class="payment-summary-money">$${(spriceCents/100).toFixed(2)}</div>
         </div>
 
         <div class="payment-summary-row subtotal-row">
         <div>Total before tax:</div>
-        <div class="payment-summary-money">${(TotalBeforeTax/100).toFixed(2)}}</div>
+        <div class="payment-summary-money">$${(TotalBeforeTax/100).toFixed(2)}</div>
         </div>
 
         <div class="payment-summary-row">
         <div>Estimated tax (10%):</div>
-        <div class="payment-summary-money">${(TaxCents/100).toFixed(2)}}</div>
+        <div class="payment-summary-money">$${(TaxCents/100).toFixed(2)}</div>
         </div>
 
         <div class="payment-summary-row total-row">
         <div>Order total:</div>
-        <div class="payment-summary-money">${(Total/100).toFixed(2)}</div>
+        <div class="payment-summary-money">$${(Total/100).toFixed(2)}</div>
         </div>
 
         <button class="place-order-button button-primary">
         Place your order
         </button>
     `
+    document.querySelector('.payment-summary').innerHTML = PaymentHtml; 
 }
+renderPayment();
 
 
