@@ -1,75 +1,77 @@
 import {cart, addToCart, UpdateCart, cart_quantity} from '../data/cart.js';
 //got the cart variable out of the module. All import must be made on the top
-import { products } from '../data/products.js'; 
+import {products ,loadProducts } from '../data/products.js'; 
+loadProducts(renderProdGrid); 
 
-let productsHTML = ''; 
-products.forEach((product) => {
-    productsHTML += `
-        <div class="product-container">
-          <div class="product-image-container">
-            <img class="product-image"
-              src="${product.image}">
-          </div>
-
-          <div class="product-name limit-text-to-2-lines">
-            ${product.name}
-          </div>
-
-          <div class="product-rating-container">
-            <img class="product-rating-stars"
-              src="images/ratings/rating-${product.rating.stars*10}.png">
-            <div class="product-rating-count link-primary">
-              ${product.rating.count}
+function renderProdGrid(){
+  let productsHTML = ''; 
+  products.forEach((product) => {
+      productsHTML += `
+          <div class="product-container">
+            <div class="product-image-container">
+              <img class="product-image"
+                src="${product.image}">
             </div>
+
+            <div class="product-name limit-text-to-2-lines">
+              ${product.name}
+            </div>
+
+            <div class="product-rating-container">
+              <img class="product-rating-stars"
+                src="images/ratings/rating-${product.rating.stars*10}.png">
+              <div class="product-rating-count link-primary">
+                ${product.rating.count}
+              </div>
+            </div>
+
+            <div class="product-price">
+              $${(product.priceCents/100).toFixed(2)}
+            </div>
+
+            <div class="product-quantity-container">
+              <select class="js-quantity-select">
+                <option selected value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+
+            <div class="product-spacer"></div>
+
+            <div class="added-to-cart">
+              <img src="images/icons/checkmark.png">
+              Added
+            </div>
+
+            <button class="add-to-cart-button button-primary" data-product-id = "${product.id}">
+              Add to Cart
+            </button>
           </div>
-
-          <div class="product-price">
-            $${(product.priceCents/100).toFixed(2)}
-          </div>
-
-          <div class="product-quantity-container">
-            <select class="js-quantity-select">
-              <option selected value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-            </select>
-          </div>
-
-          <div class="product-spacer"></div>
-
-          <div class="added-to-cart">
-            <img src="images/icons/checkmark.png">
-            Added
-          </div>
-
-          <button class="add-to-cart-button button-primary" data-product-id = "${product.id}">
-            Add to Cart
-          </button>
-        </div>
-    `; 
-});
-document.querySelector('.js-products-grid').innerHTML = productsHTML;
-
-// If you had used a simple queryselector then it would have worked for only one button. Right now this is like an array of buttons, it's called a NodeList.
-//The data attirbute data-product-name will be extrated through the dataset function (it gives us all the available attributed of an HTML element.
-//The data-product-name == productName
-
-document.querySelector('.cart-quantity').innerHTML = cart_quantity;
-document.querySelectorAll('.add-to-cart-button').forEach(button => {
-  button.addEventListener('click', () => {
-    const productElement = button.closest('.product-container');
-    const qty = parseInt(productElement.querySelector('.js-quantity-select').value);
-    const productId = button.dataset.productId;
-    addToCart(productId, qty)
-    UpdateCart(qty);
-    document.querySelector('.cart-quantity').innerHTML = cart_quantity;
+      `; 
   });
-});
+  document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
+  // If you had used a simple queryselector then it would have worked for only one button. Right now this is like an array of buttons, it's called a NodeList.
+  //The data attirbute data-product-name will be extrated through the dataset function (it gives us all the available attributed of an HTML element.
+  //The data-product-name == productName
+
+  document.querySelector('.cart-quantity').innerHTML = cart_quantity;
+  document.querySelectorAll('.add-to-cart-button').forEach(button => {
+    button.addEventListener('click', () => {
+      const productElement = button.closest('.product-container');
+      const qty = parseInt(productElement.querySelector('.js-quantity-select').value);
+      const productId = button.dataset.productId;
+      addToCart(productId, qty)
+      UpdateCart(qty);
+      document.querySelector('.cart-quantity').innerHTML = cart_quantity;
+    });
+  });
+}
