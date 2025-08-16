@@ -1,9 +1,14 @@
 import { cart, DecreCart, cart_quantity, DelFromCart, UpdateCart, UpdateDelID } from "../data/cart.js";
-import { products } from "../data/products.js";
+import { products, loadProducts } from "../data/products.js";
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import { deliveryOptions } from "../data/deliveryoptions.js";
 // External library dayjs
 import '../data/back-prac.js';
+
+loadProducts(() => {
+    renderOrderSummary();
+    renderPayment();
+})
 
 function renderOrderSummary(){
 let cartSumHTML = ``;
@@ -144,7 +149,7 @@ document.querySelectorAll('.delivery-option-input').forEach((elam) => {
     })
 })
 }
-renderOrderSummary(); 
+// renderOrderSummary(); 
 // The rendering thing has a benifit. in the MVC model, you First geenrate HTML code, interact with the genrated page, make changes and then re-render the page in order to enforce that change.
 
 function renderPayment(){
@@ -200,6 +205,6 @@ function renderPayment(){
     `
     document.querySelector('.payment-summary').innerHTML = PaymentHtml; 
 }
-renderPayment();
+// renderPayment();
 
 
