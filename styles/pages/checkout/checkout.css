@@ -167,6 +167,10 @@
   font-size: 18px;
   margin-bottom: 12px;
 }
+.order-summary{
+  display: grid !important;
+  grid-template-columns: 100% 1fr !important;
+}
 
 .payment-summary-row {
   display: grid;

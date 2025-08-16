@@ -19,45 +19,43 @@ cart.forEach((item) => {
     let Date = dayjs().add(7, 'days').format('dddd, MMMM D'); 
 
     cartSumHTML += 
-    `
-        <div class="cart-item-container-${matchingProduct.id} item-container">
-            <div class="delivery-date">
-            Delivery date: ${Date} 
+    `<div class="cart-item-container-${matchingProduct.id} item-container">
+        <div class="delivery-date">
+        Delivery date: ${Date} 
+        </div>
+        <div class="cart-item-details-grid">
+            <img class="product-image"
+            src="${matchingProduct.image}">
+
+            <div class="cart-item-details">
+            <div class="product-name">
+                ${matchingProduct.name}
             </div>
-            <div class="cart-item-details-grid">
-                <img class="product-image"
-                src="${matchingProduct.image}">
+            <div class="product-price">
+                $${(matchingProduct.priceCents / 100).toFixed(2)}
+            </div>
+            <div class="product-quantity">
+                <span>
+                Quantity: <span class="quantity-label">${item.quantity}</span>
+                <input class = "js-new-quantity-input" type = "number" value = "${item.quantity}" autocomplete = "off"style="width: 40px; display: none;">
+                </span>
+                <span class="update-quantity-link link-primary" data-product-id = "${matchingProduct.id}" ">
+                Update
+                </span>
+                <span class="delete-quantity-link link-primary" data-product-id = "${matchingProduct.id}" ">
+                Delete
+                </span>
+            </div>
+            </div>
 
-                <div class="cart-item-details">
-                <div class="product-name">
-                    ${matchingProduct.name}
-                </div>
-                <div class="product-price">
-                    $${(matchingProduct.priceCents / 100).toFixed(2)}
-                </div>
-                <div class="product-quantity">
-                    <span>
-                    Quantity: <span class="quantity-label">${item.quantity}</span>
-                    <input class = "js-new-quantity-input" type = "number" value = "${item.quantity}" autocomplete = "off"style="width: 40px; display: none;">
-                    </span>
-                    <span class="update-quantity-link link-primary" data-product-id = "${matchingProduct.id}" ">
-                    Update
-                    </span>
-                    <span class="delete-quantity-link link-primary" data-product-id = "${matchingProduct.id}" ">
-                    Delete
-                    </span>
-                </div>
-                </div>
-
-                <div class="delivery-options">
-                <div class="delivery-options-title">
-                    Choose a delivery option:
-                </div>
-                ${Deliveryoptions(item)}
-                </div>
+            <div class="delivery-options">
+            <div class="delivery-options-title">
+                Choose a delivery option:
+            </div>
+            ${Deliveryoptions(item)}
             </div>
         </div>
-    `;
+    </div>`;
 });
 document.querySelector('.order-summary').innerHTML = cartSumHTML;
 document.querySelector('.return-to-home-link').innerHTML = cart_quantity;
