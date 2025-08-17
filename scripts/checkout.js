@@ -5,10 +5,29 @@ import { deliveryOptions } from "../data/deliveryoptions.js";
 // External library dayjs
 import '../data/back-prac.js';
 
-loadProducts(() => {
+//Now we will look at promises, they let us control the flow of async code. 
+//First the Prmise function will start running, when it hits resolve. The Compiler simultaneously starts running the then() with the exsisting promise function, the benifit of promises is that yu can do things simultaneously.
+//The problem with multiple callbacks is nesting. Very heavy nesting. Promises let us flatten our code, you can, in the then function, just return new Promise((resolve) => {}) and continue.
+//1) Another thing, You can feed values into resolve, they will be parameters for the immideatly next then func.
+//2) All promises: give an array of multiple promises, your func will wait for all of them to finish before moving to the next them. 
+/*
+promise.all([
+    new promise((resolve) => {}), 
+    new promise((resolve) => {})
+]).then(() => {})
+*/
+
+new Promise((resolve) => {
+    loadProducts(() => {
+        resolve();
+    })
+}).then(() => {
     renderOrderSummary();
     renderPayment();
 })
+
+
+
 
 function renderOrderSummary(){
 let cartSumHTML = ``;
