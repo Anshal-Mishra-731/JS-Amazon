@@ -1,7 +1,12 @@
-import {cart, addToCart, UpdateCart, cart_quantity} from '../data/cart.js';
+import {addToCart, UpdateCart, cart_quantity} from '../data/cart.js';
 //got the cart variable out of the module. All import must be made on the top
 import {products ,loadProducts } from '../data/products.js'; 
-loadProducts(renderProdGrid); 
+
+async function RenderPage() {
+  await loadProducts();
+  renderProdGrid();
+}
+RenderPage(); 
 
 function renderProdGrid(){
   let productsHTML = ''; 

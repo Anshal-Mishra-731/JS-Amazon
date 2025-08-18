@@ -667,7 +667,7 @@ fetch uses a get by default, so its async. return response.json() get's our resp
 you don't need to return anything after a promise if you don't need any parameters for your then. 
 if you want to use the .then thing outside the function then ofcousre you would have to return the entire promise.
 if your return a value, That value becomes the input for the next .then:
-If you return a promise (not for outside func), The chain will wait until that promise resolves, then pass its resolved value to the next .then:
+If you return a promise , The chain will wait until that promise resolves, then pass its resolved value to the next .then:
 function loadProductsFetch(func){
   const promise = fetch('https://supersimplebackend.dev/products').then((response) => {
     return response.json();
@@ -678,12 +678,23 @@ function loadProductsFetch(func){
 }
 loadProducts().then(()=> {console.log('next-step')})
 */
-export function loadProducts(func){
-  const xhr = new XMLHttpRequest();
-  xhr.addEventListener('load', () => {
-    products = JSON.parse(xhr.response);
-    func();
+
+export function loadProducts(){
+  const promise  = fetch('https://supersimplebackend.dev/products').then((response) => {
+    return response.json();
+  }).then((data) => {
+    products = data;
   })
-  xhr.open('GET', 'https://supersimplebackend.dev/products'); //This sends a JSON file, but we gotta make it a JS object array.
-  xhr.send(); 
+  return promise; 
 }
+
+
+// export function loadProducts(func){
+//   const xhr = new XMLHttpRequest();
+//   xhr.addEventListener('load', () => {
+//     products = JSON.parse(xhr.response);
+//     func();
+//   })
+//   xhr.open('GET', 'https://supersimplebackend.dev/products'); //This sends a JSON file, but we gotta make it a JS object array.
+//   xhr.send(); 
+// }

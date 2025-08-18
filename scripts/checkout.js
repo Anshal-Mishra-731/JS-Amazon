@@ -15,17 +15,30 @@ promise.all([
     new promise((resolve) => {}), 
     new promise((resolve) => {})
 ]).then(() => {})
-*/
-
 new Promise((resolve) => {
     loadProducts(() => {
         resolve();
+        //resolve("") means returning un-identified.
     })
 }).then(() => {
     renderOrderSummary();
     renderPayment();
 })
+*/
 
+async function loadPage() {
+    await loadProducts(); 
+    renderOrderSummary();
+    renderPayment();
+}
+/*
+had it been returning a promise the await keyword would basically wait until the promise is over. and the async thing makes the whole function a promise. So you can apply "then" thing to the function directly once the function executes.
+on the second line is the syntax for call-back based functions, we create a new promise. the value returned can be stored and used in the rest of our code like a normal value. 
+async function loadPage() {
+    const value = await new promise (() => {resolve("val")})
+}
+*/
+loadPage();
 
 
 
