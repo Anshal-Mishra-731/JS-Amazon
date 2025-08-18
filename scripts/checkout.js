@@ -3,6 +3,7 @@ import { products, loadProducts } from "../data/products.js";
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import { deliveryOptions } from "../data/deliveryoptions.js";
 // External library dayjs
+import { addOrder } from "../data/ordo.js";
 import '../data/back-prac.js';
 
 //Now we will look at promises, they let us control the flow of async code. 
@@ -25,9 +26,14 @@ new Promise((resolve) => {
     renderPayment();
 })
 */
-
+//The try-catch syntax to handel errors from a promise in async. If there some error-nirmata code then we put that in try.
 async function loadPage() {
-    await loadProducts(); 
+    try {
+        // throw 'error1' you can manually create errors. using throw, whereever you may use that.When the compiler gets an error it skips the code below it and goes straight to catch. to create an error in the future look at ln 43.
+        await loadProducts()
+    } catch (error) {
+        console.log("there was a problem");
+    }
     renderOrderSummary();
     renderPayment();
 }
@@ -35,7 +41,9 @@ async function loadPage() {
 had it been returning a promise the await keyword would basically wait until the promise is over. and the async thing makes the whole function a promise. So you can apply "then" thing to the function directly once the function executes.
 on the second line is the syntax for call-back based functions, we create a new promise. the value returned can be stored and used in the rest of our code like a normal value. 
 async function loadPage() {
-    const value = await new promise (() => {resolve("val")})
+    say you want to create an error in the future (throw error after a promise is executed, you use the reject keyword.
+    throw works inside async/await functions.reject is used in manual new Promise wrappers.
+    const value = await new promise ((resolve, reject) => {reject('error');/resolve("val");})
 }
 */
 loadPage();
@@ -229,12 +237,34 @@ function renderPayment(){
         <div class="payment-summary-money">$${(Total/100).toFixed(2)}</div>
         </div>
 
-        <button class="place-order-button button-primary">
+        <button class="place-order-button button-primary js-place-order">
         Place your order
         </button>
     `
     document.querySelector('.payment-summary').innerHTML = PaymentHtml; 
+    document.querySelector('.js-place-order').addEventListener('click', async ()=> {
+        try {
+            const response = await fetch('https://supersimplebackend.dev/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    cart: cart
+                })
+            }); 
+            //Wait until request is sent + response headers are received. Wait until the response body is fully read & parsed. so two awaits.
+            const order = await response.json();
+            addOrder(order); 
+        } catch(error){
+            console.log("oh no! there war some error"); 
+        }
+        //this just changes the URL at the top. 
+        window.location.href = 'orders.html'; 
+    })
 }
 // renderPayment();
+
+//As you have the tracking page is just plain HTML right now, what you have to do is to use the URL function to get the parametrs out of the URL in order to know which parameter is being tracked. that's a work on it's own, we won't do it now, or maybe ever, I am not sure. And in the order.html, when teh href tracking.html is generated, make sure it is generated using the orderID and the productID as a URL parameter. That's what you need to make the page functional.   
 
 

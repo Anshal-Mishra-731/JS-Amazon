@@ -678,12 +678,14 @@ function loadProductsFetch(func){
 }
 loadProducts().then(()=> {console.log('next-step')})
 */
-
+//if there's an error in fetching (GET) then we can use catch (Error in callback language) and execute that thing. .catch() attaches to the nearest promise chain. If there is an error, then the code is skipped and the compiler goes straigth to catch.
 export function loadProducts(){
   const promise  = fetch('https://supersimplebackend.dev/products').then((response) => {
     return response.json();
   }).then((data) => {
     products = data;
+  }).catch(() => {
+    console.log("unexpected error, try again"); 
   })
   return promise; 
 }
